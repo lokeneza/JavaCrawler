@@ -22,26 +22,26 @@ class Consumer extends Thread {
     
     @Override
     public void run() {
-    	
-		// Prepare the database.
-		try {
-			sqlite = new SQLiteManager(databaseName);
-			sqlite.openConnection();
-			sqlite.verifyIfDatabaseExistsElseCreate();
-		} 
-		catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-    	
-    	// Get movie objects from queue and insert them into database.
+        
+        // Prepare the database.
+        try {
+            sqlite = new SQLiteManager(databaseName);
+            sqlite.openConnection();
+            sqlite.verifyIfDatabaseExistsElseCreate();
+        } 
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } 
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        // Get movie objects from queue and insert them into database.
         while (true) {
             synchronized (queue) {
                 while (queue.isEmpty()) {                    
                     try {
-                    	// Queue is empty, so wait for the producer thread to put some items into the queue.
+                        // Queue is empty, so wait for the producer thread to put some items into the queue.
                         queue.wait();
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -51,15 +51,15 @@ class Consumer extends Thread {
 
               
                 MovieObject movieObject = queue.remove();
-                if (movieObject == null) break;					// check FOR END-OF-QUEUE message / POISON
+                if (movieObject == null) break;                    // check FOR END-OF-QUEUE message / POISON
                 //System.out.println("Consuming value : " + movieObject);
                 try {
-					sqlite.insertMovieDataWithBlob(movieObject);
-				} catch (SQLException | IOException e) {
-					e.printStackTrace();
-				}
+                    sqlite.insertMovieDataWithBlob(movieObject);
+                } catch (SQLException | IOException e) {
+                    e.printStackTrace();
+                }
                 System.out.printf("%s id: %d \t %s \t %s %n", 
-                		"[DONE]", movieObject.getId(), movieObject.getPosterURL(), movieObject.getTitle());	
+                        "[DONE]", movieObject.getId(), movieObject.getPosterURL(), movieObject.getTitle());    
                 
                 queue.notifyAll();
             }
@@ -67,14 +67,14 @@ class Consumer extends Thread {
         
         // Close the database.
         try {
-			//sqlite.readTableAndPrint();
-			sqlite.closeConnection();
-		} 
+            //sqlite.readTableAndPrint();
+            sqlite.closeConnection();
+        } 
         catch (SQLException e) {
-			e.printStackTrace();
-		}
+            e.printStackTrace();
+        }
         finally {
-        	System.out.println("THE END");
+            System.out.println("THE END");
         }
     }
 }
