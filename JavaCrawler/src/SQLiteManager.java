@@ -59,7 +59,7 @@ public class SQLiteManager {
      */
     public void verifyIfDatabaseExistsElseCreate() throws SQLException {
         statement = connection.createStatement();
-        statement.setQueryTimeout(30);  // set timeout to 30 sec.
+        statement.setQueryTimeout(10);  // set timeout to 10 sec.
         statement.executeUpdate(
             "CREATE TABLE IF NOT EXISTS movie (id INTEGER PRIMARY KEY, title TEXT, url TEXT, poster_url TEXT, poster_blob BLOB)");
         //statement.close;

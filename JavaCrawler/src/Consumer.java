@@ -1,3 +1,4 @@
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Queue;
@@ -31,6 +32,9 @@ class Consumer extends Thread {
         } 
         catch (ClassNotFoundException e) {
             e.printStackTrace();
+            // Fatal error.
+            System.out.printf("FATAL ERROR: Database connection driver class not found (JDBC). Check project dependencies."); 
+            System.exit(1);
         } 
         catch (SQLException e) {
             e.printStackTrace();

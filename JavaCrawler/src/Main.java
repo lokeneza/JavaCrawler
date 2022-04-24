@@ -12,7 +12,7 @@ public class Main {
     private static final int MIN_MOVIE_INDEX       = 1;     // min is 1
     private static final int MAX_MOVIE_INDEX       = 50;    // max is 999'999
     private static final String DATABASE_NAME      = "JavaCrawlerSQLite.db";
-    private static final int MAX_QUEUE_SIZE        = 100;   // queue used by producer/consumer threads
+    private static final int MAX_QUEUE_SIZE        = 10;    // queue used by producer/consumer threads
     private static final int THREAD_SLEEP_TIME     = 5000;  // in milliseconds
     private static final int THREAD_SLEEP_INTERVAL = 100;   // wait after N movies
 

@@ -3,6 +3,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Queue;
@@ -72,12 +73,8 @@ class Producer extends Thread {
                     String movieURL = baseURL + "/movie/" + i; 
                     
                     // Get the whole HTML.
-                    Document doc = (Document) Jsoup.connect(movieURL).timeout(2000).get();
+                    Document doc = (Document) Jsoup.connect(movieURL).timeout(5000).get();  
                     //System.out.print(doc.toString());
-                
-                    // Extract all meta tags.
-                    //Elements elements = doc.select("meta[property]");
-                    //System.out.println (elements);
                     
                     // Extract title and image url from meta tags.
                     String movieTitle     = doc.select("meta[property=og:title]").attr("content");
@@ -110,9 +107,13 @@ class Producer extends Thread {
                 }
                 catch (UnknownHostException e) {
                     //e.printStackTrace();
-                    System.out.printf("%s id: %d \t %s %n", "[FAIL]", i, "Connection problem. Either website or internet is down.");
+                    System.out.printf("%s id: %d \t %s %n", "[FAIL]", i, "Connection problem. Website or internet is down.");
                     //stop the program when no connection.
                     //break    
+                }
+                catch (SocketTimeoutException e) {
+                  //e.printStackTrace();
+                    System.out.printf("%s id: %d \t %s %n", "[FAIL]", i, "Connection timeout.");
                 }
                 catch (InterruptedException e) {
                     e.printStackTrace();
